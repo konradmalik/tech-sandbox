@@ -1,0 +1,20 @@
+query stage1 {
+        allProducts {
+            name
+            description
+            price
+            picture(size: 250){
+                url
+            }
+            priceAgain: price
+        }
+
+        product(id: 1){
+            name
+        }
+
+        products(ids:[1,2]){
+            name
+            description
+        }
+}

@@ -1,0 +1,11 @@
+solids:
+  sum_solid:
+    inputs:
+      num_df:
+        csv:
+          path: "data/num_prod.csv"
+  mult_solid:
+    inputs:
+      num_df:
+        csv:
+          path: "data/num_prod.csv"

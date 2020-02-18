@@ -1,0 +1,23 @@
+version: "2"
+
+services:
+    master:
+        image: alluxio/alluxio:1.8.1
+        command: master
+        ports:
+            - "19999:19999"
+        volumes:
+            - /home/konrad/Science/Programming/technologies-testing/alluxio/ufs:/opt/alluxio/underFSStorage
+
+    worker:
+        image: alluxio/alluxio:1.8.1
+        command: worker
+        shm_size: '1gb'
+        volumes:
+            - /home/konrad/Science/Programming/technologies-testing/alluxio/ufs:/opt/alluxio/underFSStorage
+        environment:
+            - ALLUXIO_WORKER_MEMORY_SIZE=1G
+            - ALLUXIO_MASTER_HOSTNAME=master
+        depends_on:
+            - master
+

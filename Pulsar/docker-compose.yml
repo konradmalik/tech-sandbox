@@ -1,0 +1,22 @@
+version: '3'
+
+services:
+    pulsar:
+        image: "apachepulsar/pulsar:2.4.0"
+        ports:
+            - 6650:6650
+            - 8080:8080
+        command: "bin/pulsar standalone"
+        restart: always
+
+    pulsar-producer:
+        build: "producer"
+        depends_on:
+            - pulsar
+        restart: always
+
+    pulsar-consumer:
+        build: "consumer"
+        depends_on:
+            - pulsar
+        restart: always

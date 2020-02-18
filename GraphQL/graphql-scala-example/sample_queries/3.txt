@@ -1,0 +1,19 @@
+query stage3{
+
+    allProducts {
+        name
+        categories {
+            products{
+                categories {
+                    products{
+                      categories {
+                          products{
+                              name
+                          }
+                      }
+                    }
+                }
+            }
+        }
+    }
+  }

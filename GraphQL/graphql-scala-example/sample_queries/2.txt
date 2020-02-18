@@ -1,0 +1,15 @@
+query ProductsWithCategories {
+  allProducts {
+        name
+        description
+        picture(size: 100){
+            url
+        }
+        categories {
+            name
+            products {
+                name
+            }
+        }
+    }
+}
