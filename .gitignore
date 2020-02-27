@@ -2,6 +2,9 @@
 # Created by https://www.gitignore.io/api/linux,macos,python,eclipse,intellij,jupyternotebooks,visualstudiocode,go
 # Edit at https://www.gitignore.io/?templates=linux,macos,python,eclipse,intellij,jupyternotebooks,visualstudiocode,go
 
+# my
+*.local
+
 ### Eclipse ###
 .metadata
 bin/

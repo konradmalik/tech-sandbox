@@ -1,0 +1,15 @@
+git clone -b learning https://github.com/ray-project/qreader
+cd qreader
+  npm install; npm run build
+  cd dist
+    sed -i 's-/static/-static/-g' index.html
+  cd ..
+cd ..
+# enable nbserverproxy
+jupyter serverextension enable --sys-prefix nbserverproxy
+# install the tutorial extension to start processes
+mv tutorialextension.py ${NB_PYTHON_PREFIX}/lib/python*/site-packages/
+# enable tutorial extension
+jupyter serverextension enable --sys-prefix tutorialextension
+cd ~/rllib_exercises/serving/pong_py
+pip install -e .
