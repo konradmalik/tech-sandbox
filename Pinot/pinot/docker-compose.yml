@@ -1,0 +1,54 @@
+version: '3'
+services:
+  zookeeper:
+    image: zookeeper:latest
+    environment:
+      ZOO_MY_ID: 1
+      ZOO_PORT: 2181
+      ZOO_SERVERS: server.1=0.0.0.0:2888:3888;2181
+    volumes:
+      - ./pinot-docker-demo/zookeeper/data:/data
+      - ./pinot-docker-demo/zookeeper/datalog:/datalog
+        
+  kafka:
+    image: confluentinc/cp-kafka:5.3.0
+    environment:
+      KAFKA_ADVERTISED_LISTENERS: LISTENER_DOCKER_INTERNAL://kafka:19092,LISTENER_DOCKER_EXTERNAL://kafka:9092
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: LISTENER_DOCKER_INTERNAL:PLAINTEXT,LISTENER_DOCKER_EXTERNAL:PLAINTEXT
+      KAFKA_INTER_BROKER_LISTENER_NAME: LISTENER_DOCKER_INTERNAL
+      KAFKA_ZOOKEEPER_CONNECT: "zookeeper:2181/kafka"
+      KAFKA_BROKER_ID: 1
+      KAFKA_LOG4J_LOGGERS: "kafka.controller=INFO,kafka.producer.async.DefaultEventHandler=INFO,state.change.logger=INFO"
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+    volumes:
+      - ./pinot-docker-demo/kafka/data:/var/lib/kafka/data
+    depends_on:
+      - zookeeper
+
+  pinot-controller:
+    image: apachepinot/pinot:0.3.0-SNAPSHOT
+    volumes:
+      - ./pinot-docker-demo/pinot/controller:/tmp/data/controller
+    ports:
+      - "9000:9000"
+    command: StartController -zkAddress zookeeper:2181
+    depends_on:
+      - kafka
+
+  pinot-broker:
+    image: apachepinot/pinot:latest
+    command: StartBroker -zkAddress zookeeper:2181
+    depends_on:
+      - zookeeper
+      - kafka
+      - pinot-controller
+        
+  pinot-server:
+    image: apachepinot/pinot:latest
+    volumes:
+      - ./pinot-docker-demo/pinot/server:/tmp/data/server
+    command: StartServer -zkAddress zookeeper:2181
+    depends_on:
+      - zookeeper
+      - kafka
+      - pinot-controller
