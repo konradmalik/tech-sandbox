@@ -1,0 +1,26 @@
+version: '3'
+services:
+    influxdb:
+      image: influxdb:latest
+      container_name: influxdb
+      ports:
+        - "8086:8086"
+      volumes:
+        - ./init-scripts:/docker-entrypoint-initdb.d:ro
+      env_file:
+          - env.influxdb
+
+    telegraf:
+      image: telegraf:latest
+      container_name: telegraf
+      volumes:
+        - ./telegraf.conf:/etc/telegraf/telegraf.conf:ro
+
+    grafana:
+      image: grafana/grafana:latest
+      container_name: grafana
+      ports:
+        - "3000:3000"
+      env_file:
+        - 'env.grafana'
+      user: "0"
